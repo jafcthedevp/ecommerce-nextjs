@@ -85,7 +85,7 @@ Despliega fácilmente en [Vercel](https://vercel.com/) o tu plataforma favorita.
 
 ## 📝 Autor
 
-- Desarrollado por [Jesus](https://github.com/tuusuario)
+- Desarrollado por [Jesus](https://github.com/jafcthedevp)
 
 ---
 
