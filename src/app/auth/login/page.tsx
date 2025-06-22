@@ -1,57 +1,71 @@
-'use client'
+"use client";
 
-import Image from "next/image"
-import Link from "next/link"
+import Image from "next/image";
+import Link from "next/link";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { supabase } from "@/lib/supabase/client"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { supabase } from "@/lib/supabase/client";
+import { useState } from "react";
 
+interface FormLogin = {
+  email: string;
+  password: string;
+};
 
-type FormEvent = {
-    email: string;
-    password: string;
-}
+export default function LoginPage() {
+  const [FormEvent, setFormEvent] = useState<FormLogin>({
+    email: "",
+    password: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
-export default function LoginPage(FormEvent: FormEvent) {
+  const handleLogin = async (FormLogin: FormLogin) => {
+    FormLogin.preventDefault();
 
-    const handleLogin = async (e: any) => {
-        e.preventDefault()
+    try {
+      const {} = await supabase.auth.signInWithPassword({
+        email: FormLogin.email,
+        password: FormLogin.password,
+      });
 
-        try {
-        const { } = await supabase.auth.signInWithPassword({
-            email: FormEvent.email,
-            password: FormEvent.password,
-        })
-
-        if (FormEvent.password.length < 6) {
-                alert("La contraseña debe tener al menos 6 caracteres")
-                return
-            }
-
-        } catch (error) {
-            console.error("Error al iniciar sesión:", error)
-        }
+      if (FormEvent.password.length < 6) {
+        alert("La contraseña debe tener al menos 6 caracteres");
+        return;
+      }
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
     }
+  };
 
   return (
-    <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
-      <div className="flex items-center justify-center py-12">
+    <div className="w-full min-h-screen flex flex-col lg:flex-row">
+      <div className="flex flex-1 items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
             <h1 className="text-3xl font-bold">Iniciar sesión</h1>
-            <p className="text-balance text-muted-foreground">Ingresa tu email y contraseña para acceder a tu cuenta</p>
+            <p className="text-balance text-muted-foreground">
+              Ingresa tu email y contraseña para acceder a tu cuenta
+            </p>
           </div>
           <div className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="m@example.com" required />
+              <Input
+                id="email"
+                type="email"
+                placeholder="email@example.com"
+                required
+              />
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Contraseña</Label>
-                <Link href="#" className="ml-auto inline-block text-sm underline">
+                <Link
+                  href="#"
+                  className="ml-auto inline-block text-sm underline"
+                >
                   ¿Olvidaste tu contraseña?
                 </Link>
               </div>
@@ -69,9 +83,9 @@ export default function LoginPage(FormEvent: FormEvent) {
           </div>
         </div>
       </div>
-      <div className="hidden bg-muted lg:block">
+      <div className="hidden lg:flex flex-1 bg-muted">
         <Image
-          src="/ecommerceportada.svg?height=1080&width=1920"
+          src="/ecommermilochenta.png?height=1080&width=1920"
           alt="Imagen de fondo"
           width="1920"
           height="1080"
@@ -79,5 +93,5 @@ export default function LoginPage(FormEvent: FormEvent) {
         />
       </div>
     </div>
-  )
+  );
 }
