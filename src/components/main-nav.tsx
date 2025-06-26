@@ -4,16 +4,31 @@ import Link from "next/link"
 import { Mountain } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useAuth } from "@/context/AuthContext"
+import { supabase } from "@/lib/supabase/client"
 
 export default function MainNav() {
-  // Simula el estado de autenticación. En una aplicación real, esto vendría de un contexto o hook de Supabase.
-  const [isAuthenticated, setIsAuthenticated] = useState(false) // Cambia a true para probar el botón de cerrar sesión
+
+  const { session, loading } = useAuth()
+
+  
+  const [isAuthenticated, setIsAuthenticated] = useState(false) 
+
+  useEffect(() => {
+    if (!loading) {
+      setIsAuthenticated(!!session)
+    }
+  }, [session, loading])
 
   const handleLogout = () => {
     // Lógica para cerrar sesión con Supabase
-    console.log("Cerrar sesión")
-    setIsAuthenticated(false)
+    supabase.auth.signOut().then(() => {
+      setIsAuthenticated(false)
+      // Redirigir o mostrar un mensaje de éxito
+    }).catch((error) => {
+      console.error("Error al cerrar sesión:", error)
+    })
   }
 
   return (

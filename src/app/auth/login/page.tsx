@@ -9,33 +9,50 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase/client";
 import { useState } from "react";
 
-interface FormLogin = {
+interface FormLogin {
   email: string;
   password: string;
-};
+}
 
 export default function LoginPage() {
-  const [FormEvent, setFormEvent] = useState<FormLogin>({
+  const [formData, setFormData] = useState<FormLogin>({
     email: "",
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async (FormLogin: FormLogin) => {
-    FormLogin.preventDefault();
+  const handleInputChange = (field: keyof FormLogin, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const validateForm = () => {
+    if (!formData.email || !formData.password) {
+      alert("Por favor, completa todos los campos.");
+      return false;
+    }
+    if (formData.password.length < 6) {
+      alert("La contraseña debe tener al menos 6 caracteres.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleLogin = async () => {
+    if (!validateForm()) return;
+    setIsLoading(true);
 
     try {
       const {} = await supabase.auth.signInWithPassword({
-        email: FormLogin.email,
-        password: FormLogin.password,
+        email: formData.email,
+        password: formData.password,
       });
-
-      if (FormEvent.password.length < 6) {
-        alert("La contraseña debe tener al menos 6 caracteres");
-        return;
-      }
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -53,6 +70,8 @@ export default function LoginPage() {
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
+                value={formData.email}
+                onChange={(e) => handleInputChange("email", e.target.value)}
                 id="email"
                 type="email"
                 placeholder="email@example.com"
@@ -69,9 +88,20 @@ export default function LoginPage() {
                   ¿Olvidaste tu contraseña?
                 </Link>
               </div>
-              <Input id="password" type="password" required />
+              <Input
+                value={formData.password}
+                onChange={(e) => handleInputChange("password", e.target.value)}
+                id="password"
+                type="password"
+                required
+              />
             </div>
-            <Button type="submit" className="w-full" onClick={handleLogin}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isLoading}
+              onClick={handleLogin}
+            >
               Iniciar sesión
             </Button>
           </div>

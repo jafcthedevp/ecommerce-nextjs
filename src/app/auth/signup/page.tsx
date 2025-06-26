@@ -35,15 +35,15 @@ export default function SignupPage() {
   const validateForm = () => {
     if (!formData.email || !formData.password || !formData.confirmPassword) {
       toast("Por favor, completa todos los campos.");
-      return false;
+      return;
     }
     if (formData.password !== formData.confirmPassword) {
       toast("Las contraseñas no coinciden.");
-      return false;
+      return;
     }
     if (formData.password.length < 6) {
       toast("La contraseña debe tener al menos 6 caracteres.");
-      return false;
+      return;
     }
     return true;
   };
@@ -89,6 +89,8 @@ export default function SignupPage() {
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
+                id="email"
+                type="email"
                 value={formData.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
                 placeholder="email@example.com"
