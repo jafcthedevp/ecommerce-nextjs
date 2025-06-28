@@ -1,34 +1,31 @@
-'use client';
-
-import { useSelectedLayoutSegment } from "next/navigation";
-import type React from "react";
-import MainNav from "@/components/main-nav";
-import Footer from "@/components/footer";
-import DashboardNav from "@/components/dashboard-nav"; // Importa la nueva navegación del dashboard
+import type React from "react"
+import MainNav from "@/components/main-nav"
+import Footer from "@/components/footer"
+import DashboardSidebar from "@/components/dashboard-sidebar"
+import { SidebarProvider, Sidebar, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
+import { Separator } from "@/components/ui/separator"
 
 export default function DashboardLayout({
-  overview, // Slot para el resumen
-  products, // Slot para productos
-  orders, // Slot para pedidos
+  children,
 }: {
-  overview: React.ReactNode;
-  products: React.ReactNode;
-  orders: React.ReactNode;
+  children: React.ReactNode
 }) {
-  const segment = useSelectedLayoutSegment();
-
   return (
-    <div className="min-h-screen flex flex-col">
-      <MainNav />
-      <main className="flex-1 p-4 md:p-6">
-        <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-        <DashboardNav /> {/* Añade la navegación secundaria aquí */}
-        {/* Renderiza los slots basados en la URL */}
-        {segment === "overview" && overview}
-        {segment === "products" && products}
-        {segment === "orders" && orders}
-      </main>
-      <Footer />
-    </div>
-  );
+    <SidebarProvider>
+      <div className="flex flex-1 w-full min-h-screen flex flex-col">
+        <MainNav/>
+        <div className="flex flex-1">
+          <Sidebar collapsible="icon">
+            <DashboardSidebar />
+          </Sidebar>
+          <SidebarInset className="flex flex-col flex-1">
+            <main className="flex-1 w-full p-4 md:p-6">
+              {children}
+            </main>
+          </SidebarInset>
+        </div>
+        <Footer />
+      </div>
+    </SidebarProvider>
+  )
 }

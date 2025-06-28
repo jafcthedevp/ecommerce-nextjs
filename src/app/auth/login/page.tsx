@@ -1,8 +1,6 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -57,71 +55,67 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row">
-      <div className="flex flex-1 items-center justify-center py-12">
-        <div className="mx-auto grid w-[350px] gap-6">
-          <div className="grid gap-2 text-center">
-            <h1 className="text-3xl font-bold">Iniciar sesión</h1>
-            <p className="text-balance text-muted-foreground">
-              Ingresa tu email y contraseña para acceder a tu cuenta
-            </p>
+    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-black via-gray-900 to-gray-800 p-4">
+      <div className="w-full max-w-md bg-white/10 backdrop-blur rounded-xl shadow-lg p-8">
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-white mb-2">Iniciar sesión</h1>
+          <p className="text-balance text-gray-300">
+            Ingresa tu email y contraseña para acceder a tu cuenta
+          </p>
+        </div>
+        <div className="grid gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="email" className="text-white">
+              Email
+            </Label>
+            <Input
+              value={formData.email}
+              onChange={(e) => handleInputChange("email", e.target.value)}
+              id="email"
+              type="email"
+              placeholder="email@example.com"
+              required
+            />
           </div>
-          <div className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                value={formData.email}
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                id="email"
-                type="email"
-                placeholder="email@example.com"
-                required
-              />
+          <div className="grid gap-2">
+            <div className="flex items-center">
+              <Label htmlFor="password" className="text-white">
+                Contraseña
+              </Label>
+              <Link
+                href="#"
+                className="ml-auto inline-block text-sm underline text-gray-300 hover:text-white transition"
+              >
+                ¿Olvidaste tu contraseña?
+              </Link>
             </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Contraseña</Label>
-                <Link
-                  href="#"
-                  className="ml-auto inline-block text-sm underline"
-                >
-                  ¿Olvidaste tu contraseña?
-                </Link>
-              </div>
-              <Input
-                value={formData.password}
-                onChange={(e) => handleInputChange("password", e.target.value)}
-                id="password"
-                type="password"
-                required
-              />
-            </div>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading}
-              onClick={handleLogin}
-            >
-              Iniciar sesión
-            </Button>
+            <Input
+              value={formData.password}
+              onChange={(e) => handleInputChange("password", e.target.value)}
+              id="password"
+              type="password"
+              required
+            />
           </div>
-          <div className="mt-4 text-center text-sm">
-            ¿No tienes una cuenta?{" "}
-            <Link href="/auth/signup" className="underline">
-              Regístrate
-            </Link>
-          </div>
+          <Button
+            type="submit"
+            className="w-full mt-2"
+            disabled={isLoading}
+            onClick={handleLogin}
+          >
+            {isLoading ? "Ingresando..." : "Iniciar sesión"}
+          </Button>
+        </div>
+        <div className="mt-6 text-center text-gray-300 text-sm">
+          ¿No tienes una cuenta?{" "}
+          <Link
+            href="/auth/signup"
+            className="underline hover:text-white"
+          >
+            Regístrate
+          </Link>
         </div>
       </div>
-      <div className="hidden lg:flex flex-1 bg-muted">
-        <Image
-          src="/ecommermilochenta.png?height=1080&width=1920"
-          alt="Imagen de fondo"
-          width="1920"
-          height="1080"
-          className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-        />
-      </div>
-    </div>
+    </main>
   );
 }

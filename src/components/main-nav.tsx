@@ -32,7 +32,7 @@ export default function MainNav() {
   }
 
   return (
-    <header className="flex h-16 items-center justify-between px-4 md:px-6 border-b">
+    <header className="w-full flex h-16 items-center justify-between px-4 md:px-6 border-b">
       <Link href="/" className="flex items-center gap-2 font-semibold">
         <Mountain className="h-6 w-6" />
         <span className="sr-only">Acme Store</span>
