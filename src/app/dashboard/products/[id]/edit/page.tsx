@@ -3,56 +3,108 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
-import { useRouter, notFound } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Button, Card, CardContent, CardHeader, CardTitle, Input, Label, Textarea } from "@/components/ui"
 import { toast } from "sonner"
 import { Loader2 } from "lucide-react"
-import { products } from "@/lib/data" // Importar los datos simulados
+
+// Define el tipo de producto esperado de Supabase
+type Product = {
+  id: string
+  name: string
+  description: string
+  price: number
+  stock: number
+  imageUrl: string
+}
 
 export default function EditProductPage({ params }: { params: { id: string } }) {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const product = products.find((p) => p.id === params.id)
+  const [product, setProduct] = useState<Product | null>(null)
 
-  const [name, setName] = useState(product?.name || "")
-  const [description, setDescription] = useState(product?.description || "")
-  const [price, setPrice] = useState(product?.price.toString() || "")
-  const [stock, setStock] = useState(product?.stock.toString() || "")
-  const [imageUrl, setImageUrl] = useState(product?.imageUrl || "")
+  const [name, setName] = useState("")
+  const [description, setDescription] = useState("")
+  const [price, setPrice] = useState("")
+  const [stock, setStock] = useState("")
+  const [imageUrl, setImageUrl] = useState("")
 
   useEffect(() => {
-    if (!product) {
-      notFound()
+    const fetchProduct = async () => {
+      // Lógica de Supabase para obtener el producto por ID
+      // Ejemplo:
+      // const supabase = createClient();
+      // const { data, error } = await supabase.from('products').select('*').eq('id', params.id).single();
+      // if (error || !data) {
+      //   console.error('Error fetching product for edit:', error);
+      //   notFound();
+      //   return;
+      // }
+      // setProduct(data as Product);
+      // setName(data.name);
+      // setDescription(data.description);
+      // setPrice(data.price.toString());
+      // setStock(data.stock.toString());
+      // setImageUrl(data.imageUrl);
+
+      // Simulación de datos mientras integras Supabase
+      const simulatedProduct: Product = {
+        id: params.id,
+        name: "Producto de Ejemplo Editado",
+        description: "Esta es una descripción de un producto de ejemplo que se puede editar.",
+        price: 105.5,
+        stock: 20,
+        imageUrl: "/placeholder.svg?height=300&width=300",
+      }
+      await new Promise((resolve) => setTimeout(resolve, 500)) // Simular carga
+      setProduct(simulatedProduct)
+      setName(simulatedProduct.name)
+      setDescription(simulatedProduct.description)
+      setPrice(simulatedProduct.price.toString())
+      setStock(simulatedProduct.stock.toString())
+      setImageUrl(simulatedProduct.imageUrl)
     }
-  }, [product])
+
+    fetchProduct()
+  }, [params.id]) // Dependencia del ID para recargar si cambia
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setIsLoading(true)
 
-    // Simular una llamada a API
+    const updatedProductData = {
+      name,
+      description,
+      price: Number.parseFloat(price),
+      stock: Number.parseInt(stock),
+      imageUrl,
+    }
+
+    // Lógica de Supabase para actualizar el producto
+    // Ejemplo:
+    // const supabase = createClient();
+    // const { error } = await supabase.from('products').update(updatedProductData).eq('id', params.id);
+    // if (error) {
+    //   console.error('Error updating product:', error);
+    //   toast.error('Error al actualizar el producto');
+    // } else {
+    //   toast.success('Producto actualizado', { description: `El producto "${name}" ha sido modificado correctamente.` });
+    //   router.push(`/dashboard/products/${params.id}`);
+    // }
+
+    // Simulación de éxito
     await new Promise((resolve) => setTimeout(resolve, 1500))
-
-    // Aquí iría la lógica para actualizar el producto (e.g., a Supabase)
-    // const updatedProduct = {
-    //   id: params.id,
-    //   name,
-    //   description,
-    //   price: parseFloat(price),
-    //   stock: parseInt(stock),
-    //   imageUrl,
-    // };
-    // console.log("Producto actualizado:", updatedProduct);
-
-    setIsLoading(false)
     toast("Producto actualizado", {
       description: `El producto "${name}" ha sido modificado correctamente.`,
     })
     router.push(`/dashboard/products/${params.id}`) // Redirigir a la página de detalles
+
+    setIsLoading(false)
   }
 
   if (!product) {
-    return null // notFound() ya maneja esto, pero para evitar errores de TS
+    // Puedes mostrar un skeleton o un mensaje de carga aquí
+    return <div className="w-full max-w-none space-y-6 p-4 md:p-6 text-center">Cargando producto...</div>
   }
 
   return (

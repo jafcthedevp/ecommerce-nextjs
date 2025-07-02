@@ -4,12 +4,37 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { products } from "@/lib/data"
 import { ShoppingCart, Pencil } from "lucide-react"
 
-export default function ProductDetailsPage({ params }: { params: { id: string } }) {
-  const product = products.find((p) => p.id === params.id)
+// Define el tipo de producto esperado de Supabase
+type Product = {
+  id: string
+  name: string
+  description: string
+  price: number
+  stock: number
+  imageUrl: string
+}
 
+export default async function ProductDetailsPage({ params }: { params: { id: string } }) {
+  // Lógica de Supabase para obtener un producto por ID
+  // Ejemplo:
+  // const supabase = createClient();
+  // const { data: product, error } = await supabase.from('products').select('*').eq('id', params.id).single();
+  // if (error || !product) {
+  //   console.error('Error fetching product:', error);
+  //   notFound();
+  // }
+
+  // Simulación de datos mientras integras Supabase
+  const product: Product | null = {
+    id: params.id,
+    name: "Producto de Ejemplo",
+    description: "Esta es una descripción de un producto de ejemplo cargado dinámicamente.",
+    price: 99.99,
+    stock: 10,
+    imageUrl: "/placeholder.svg?height=600&width=600",
+  }
   if (!product) {
     notFound()
   }

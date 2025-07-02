@@ -1,19 +1,34 @@
+'use client'
+
 import type React from "react"
 import MainNav from "@/components/main-nav"
 import Footer from "@/components/footer"
 import DashboardSidebar from "@/components/dashboard-sidebar"
 import { SidebarProvider, Sidebar, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
-import { Separator } from "@/components/ui/separator"
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { Router } from "lucide-react"
+import { useAuth } from "@/context/AuthContext"
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  
+  const { session, loading } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!session && !loading) {
+      router.push('/auth/login')
+    }
+  }, [session, loading, router])
+
   return (
     <SidebarProvider>
       <div className="flex flex-1 w-full min-h-screen flex flex-col">
-        <MainNav/>
+        <MainNav />
         <div className="flex flex-1">
           <Sidebar collapsible="icon">
             <DashboardSidebar />

@@ -18,7 +18,7 @@ import { DollarSign, Users, ShoppingCart, Package } from "lucide-react"
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6"> 
       <h2 className="text-2xl font-bold">¡Bienvenido a tu Dashboard!</h2>
       <p className="text-lg text-muted-foreground">Usa la barra de navegación lateral para explorar las secciones.</p>
 
