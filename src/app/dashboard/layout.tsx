@@ -5,10 +5,11 @@ import MainNav from "@/components/main-nav"
 import Footer from "@/components/footer"
 import DashboardSidebar from "@/components/dashboard-sidebar"
 import { SidebarProvider, Sidebar, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
+import { Skeleton } from "@/components/ui/skeleton"
 import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Router } from "lucide-react"
+import { redirect } from "next/navigation"
 import { useAuth } from "@/context/AuthContext"
+import DashboardLoading from "../loading"
 
 export default function DashboardLayout({
   children,
@@ -17,14 +18,19 @@ export default function DashboardLayout({
 }) {
   
   const { session, loading } = useAuth()
-  const router = useRouter()
 
   useEffect(() => {
     if (!session && !loading) {
-      router.push('/auth/login')
+      redirect('/auth/login')
     }
-  }, [session, loading, router])
+  }, [session, loading])
 
+  if (loading) {
+    return (
+      <DashboardLoading/>
+    );
+  }
+  
   return (
     <SidebarProvider>
       <div className="flex flex-1 w-full min-h-screen flex flex-col">

@@ -19,8 +19,8 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
-  
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleInputChange = (field: keyof FormLogin, value: string) => {
     setFormData((prev) => ({
@@ -50,8 +50,13 @@ export default function LoginPage() {
         email: formData.email,
         password: formData.password,
       });
-    } catch (error) {
-      console.error("Error al iniciar sesión:", error);
+      if (error) {
+        setError(error.message);
+        toast.error("Credenciales invalidas");
+        return;
+      }
+    } catch (err) {
+      console.error("Error al iniciar sesión:", err);
     } finally {
       setIsLoading(false);
     }

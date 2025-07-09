@@ -1,10 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Mountain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import AuthNavButtons from "@/components/ui-custom/authNavButtons";
 export default function MainNav() {
